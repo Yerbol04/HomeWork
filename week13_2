@@ -1,0 +1,26 @@
+package HomeWork;
+
+import java.io.*;
+import java.util.*;
+
+public class week13_4 {
+    static int sum = 0;
+    static Object object = new int[4];
+    public static void main(String[] args) throws IOException {
+        Scanner muh = new Scanner(System.in);
+        synchronized (object){
+            for (int i = 0; i < 100; i++) {
+
+                new Thread(() -> {
+                    sum++;
+                }).start();
+            }}
+//        for (int i = 0; i < 100; i++) {
+//
+//            new Thread(() -> {
+//                sum++;
+//            }).start();
+//        }
+        System.out.println(sum);
+    }
+}
