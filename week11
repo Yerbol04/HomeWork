@@ -1,0 +1,28 @@
+package HomeWork;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
+
+public class week11_2 {
+    public static void main(String[] args){
+        Scanner muh = new Scanner(System.in);
+        String soz = muh.nextLine();
+        String line = "";
+        Set<String> list = new HashSet<>();
+        try {
+            File file = new File(soz);
+            FileReader fileReader = new FileReader(file);
+            Scanner muha = new Scanner(fileReader);
+
+            while (muha.hasNextLine()) {
+                line = muha.nextLine();
+                list.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println(list);
+    }
+}
