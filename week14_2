@@ -1,0 +1,105 @@
+package HomeWork;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Date;
+
+public class week14_1_server extends Application {
+    private double annualInterestRate;
+    private int numberOfYears;
+    private double loanAmount;
+    String message = "";
+    ServerSocket serverSocket = null;
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        TextArea textArea = new TextArea();
+
+        stage.setScene(new Scene(textArea, 400, 400));
+        stage.show();
+
+
+        message += "Server started at: " + new Date() + "\n";
+        new Thread(() -> {
+            try {
+                serverSocket = new ServerSocket(2022);
+                Socket socket = serverSocket.accept();
+
+                DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
+                DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
+
+                while (true) {
+                    double interest = inputFromClient.readDouble();
+                    message += "Connected to a client: " + new Date() + "\n";
+                    int year = inputFromClient.readInt();
+                    double loanAmount = inputFromClient.readDouble();
+                    message += "Annual Interest Rate: " + interest + "\n";
+                    message += "Number of Years: " + year + "\n";
+                    message += "Loan Amount: " + loanAmount + "\n";
+
+                    Loan loan = new Loan(interest, year, loanAmount);
+                    double monthlyPayment = loan.getMonthlyPayment();
+                    double totalPayment = loan.getTotalPayment();
+
+                    outputToClient.writeDouble(monthlyPayment);
+                    outputToClient.writeDouble(totalPayment);
+                    message += "Monthly payment: " + monthlyPayment + "\n";
+                    message += "totalPayment: " + totalPayment + "\n";
+
+                    Platform.runLater(() -> {
+                        textArea.setText(message);
+                        stage.setScene(new Scene(textArea, 400, 400));
+                    });
+                }
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+        }).start();
+
+
+    }
+
+    class Loan {
+        private double annualInterestRate;
+        private int numberOfYears;
+        private double loanAmount;
+        private java.util.Date loanDate;
+
+        public Loan() {
+            this(2.5, 1, 1000);
+        }
+
+        public Loan(double annualInterestRate, int numberOfYears,
+                    double loanAmount) {
+            this.annualInterestRate = annualInterestRate;
+            this.numberOfYears = numberOfYears;
+            this.loanAmount = loanAmount;
+            loanDate = new java.util.Date();
+        }
+
+        public double getMonthlyPayment() {
+            double monthlyInterestRate = annualInterestRate / 1200;
+            double monthlyPayment = loanAmount
+                    * monthlyInterestRate
+                    / (1 - (1 / Math.pow(1 + monthlyInterestRate,
+                    numberOfYears * 12)));
+            return monthlyPayment;
+        }
+
+        public double getTotalPayment() {
+            double totalPayment = getMonthlyPayment() * numberOfYears * 12;
+            return totalPayment;
+        }
+
+    }
+}
+
