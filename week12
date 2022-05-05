@@ -1,0 +1,455 @@
+package HomeWork;
+
+public class week12_3 {
+    public static void main(String[] args) {
+        TwoWayMyLinkedList<String> list = new TwoWayMyLinkedList<String>();
+
+        list.add("Almaty");
+        System.out.println("(1) " + list);
+
+        list.add(0, "Astana");
+        System.out.println("(2) " + list);
+
+        list.add("Shymkent");
+        System.out.println("(3) " + list);
+
+        list.addLast("Semey");
+        System.out.println("(4) " + list);
+
+        list.add(2, "Aktay");
+        System.out.println("(5) " + list);
+
+        list.add(5, "Kyzylorda");
+        System.out.println("(6) " + list);
+
+        list.add(0, "Taraz");
+        System.out.println("(7) " + list);
+
+
+        list.remove(0);
+        System.out.println("(8) " + list);
+
+        list.remove(2);
+        System.out.println("(9) " + list);
+
+        list.remove(list.size() - 1);
+        System.out.print("(10) " + list + "\n(11) ");
+
+        System.out.println(list.contains("Taraz"));
+
+        for (String s: list) {
+            System.out.print(s.toUpperCase() + " ");
+        }
+        list.clear();
+        System.out.println("\nAfter clearing the list, the list size is " + list.size());
+    }
+}
+
+class TwoWayMyLinkedList<E> extends MyAbstractList<E> {
+    private Node<E> head, tail;
+
+    public TwoWayMyLinkedList() {
+    }
+
+    public TwoWayMyLinkedList(E[] objects) {
+        super(objects);
+    }
+
+    //первый элемент
+    public E getFirst() {
+        if (size == 0) {
+            return null;
+        }
+        else {
+            return head.element;
+        }
+    }
+
+    // последний элемент
+    public E getLast() {
+        if (size == 0) {
+            return null;
+        }
+        else {
+            return tail.element;
+        }
+    }
+
+    //добавление в начало списка
+    public void addFirst(E e) {
+        Node<E> newNode = new Node<E>(e);
+        newNode.next = head;
+        head = newNode;
+        size++;
+
+        if (tail == null) // the new node is the only node in list
+            tail = head;
+    }
+
+    //в конец списка
+    public void addLast(E e) {
+        Node<E> newNode = new Node<E>(e);
+
+        if (tail == null) {
+            head = tail = newNode;
+        }
+        else {
+            tail.next = newNode;
+            tail = tail.next;
+        }
+
+        size++;
+    }
+
+    //добавлениепоиндексу
+    @Override
+    public void add(int index, E e) {
+        if (index == 0) {
+            addFirst(e);
+        }
+        else if (index >= size) {
+            addLast(e);
+        }
+        else {
+            Node<E> current = head;
+            for (int i = 1; i < index; i++) {
+                current = current.next;
+            }
+            Node<E> temp = current.next;
+            current.next = new Node<E>(e);
+            (current.next).next = temp;
+            size++;
+        }
+    }
+
+    //удалеие первогомента
+    public E removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+        else {
+            Node<E> temp = head;
+            head = head.next;
+            size--;
+            if (head == null) {
+                tail = null;
+            }
+            return temp.element;
+        }
+    }
+
+    //удаление последнего эемента
+    public E removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        else if (size == 1) {
+            Node<E> temp = head;
+            head = tail = null;
+            size = 0;
+            return temp.element;
+        }
+        else {
+            Node<E> current = head;
+
+            for (int i = 0; i < size - 2; i++) {
+                current = current.next;
+            }
+
+            Node<E> temp = tail;
+            tail = current;
+            tail.next = null;
+            size--;
+            return temp.element;
+        }
+    }
+
+    // удаление по индексу
+    @Override
+    public E remove(int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        else if (index == 0) {
+            return removeFirst();
+        }
+        else if (index == size - 1) {
+            return removeLast();
+        }
+        else {
+            Node<E> previous = head;
+
+            for (int i = 1; i < index; i++) {
+                previous = previous.next;
+            }
+
+            Node<E> current = previous.next;
+            previous.next = current.next;
+            size--;
+            return current.element;
+        }
+    }
+
+    //переписывание тостринга на возвращение списка
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            result.append(current.element);
+            current = current.next;
+            if (current != null) {
+                result.append(", ");
+            }
+            else {
+                result.append("]");
+            }
+        }
+
+        return result.toString();
+    }
+
+    //очистка
+    @Override
+    public void clear() {
+        size = 0;
+        head = tail = null;
+    }
+
+    //тру если список содержит запрос
+    @Override
+    public boolean contains(E e) {
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            if (current.element.equals(e))
+                return true;
+            current = current.next;
+        }
+
+        return false;
+    }
+
+    //возвращение элемента по определенному индексу
+    @Override
+    public E get(int index) {
+        checkIndex(index);
+        Node<E> current = head;
+
+        for (int i = 0; i < size; i++) {
+            if (i == index)
+                return current.element;
+            current = current.next;
+        }
+
+        return null;
+    }
+
+    //первое совпадение
+    @Override
+    public int indexOf(E e) {
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            if (current.element.equals(e))
+                return i;
+            current = current.next;
+        }
+        return -1;
+    }
+
+    //последние совпадение
+    @Override
+    public int lastIndexOf(E e) {
+        Node<E> current = head;
+        int lastIndex = -1;
+        for (int i = 0; i < size; i++) {
+            if (current.element.equals(e))
+                lastIndex = i;
+            current = current.next;
+        }
+        return lastIndex;
+    }
+
+    //перемещение элементов по индексу
+    @Override
+    public E set(int index, E e) {
+        checkIndex(index);
+
+        Node<E> current = head;
+        E oldValue = null;
+        for (int i = 0; i < size; i++) {
+            if (i == index) {
+                oldValue = current.element;
+                current.element = e;
+                break;
+            }
+            current = current.next;
+        }
+        return oldValue;
+    }
+
+    @Override
+    public java.util.Iterator<E> iterator() {
+        return new LinkedListIterator();
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException
+                    ("Index: " + index + ", Size: " + size);
+    }
+
+    private class LinkedListIterator
+            implements java.util.Iterator<E> {
+        private Node<E> current = head;
+
+        @Override
+        public boolean hasNext() {
+            return (current != null);
+        }
+
+        @Override
+        public E next() {
+            E e = current.element;
+            current = current.next;
+            return e;
+        }
+
+        @Override
+        public void remove() {
+
+            System.out.println("Implementation left as an exercise");
+        }
+    }
+
+    private static class Node<E> {
+        E element;
+        Node<E> next;
+
+        public Node(E element) {
+            this.element = element;
+        }
+    }
+}
+abstract class MyAbstractList<E> implements MyList<E> {
+    protected int size = 0; // The size of the list
+
+    protected MyAbstractList() {
+    }
+
+    //создание листа
+    protected MyAbstractList(E[] objects) {
+        for (int i = 0; i < objects.length; i++)
+            add(objects[i]);
+    }
+
+    @Override
+    //добавление нового элемениа в конец
+    public void add(E e) {
+        add(size, e);
+    }
+
+    //проверка на заполненность
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    //колтчество списка
+    @Override
+    public int size() {
+        return size;
+    }
+
+    //удаляет первый элемент,двигает все влево,тру если ремувнулся
+    @Override
+    public boolean remove(E e) {
+        if (indexOf(e) >= 0) {
+            remove(indexOf(e));
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    //сохраняет элементы списка из другого списка
+    public boolean retainAll(MyList<E> otherList) {
+        int lastSize = size;
+
+        this.forEach(item -> {
+            if (!otherList.contains(item)) {
+                remove(item);
+            }
+        });
+        return lastSize != size;
+    }
+
+    @Override
+    //удаляет все жлементы этого мписка издругого списка
+    public boolean removeAll(MyList<E> otherList) {
+        int lastSize = size;
+        otherList.forEach(this::remove);
+        return lastSize != size;
+    }
+
+    @Override
+    //добавляет элементы в другой лист
+    public boolean addAll(MyList<E> otherList) {
+        int lastSize = size;
+        otherList.forEach(this::add);
+        return lastSize != size;
+    }
+}
+interface MyList<E> extends Iterable<E> {
+
+    public void add(E e);
+
+    public void add(int index, E e);
+
+    public void clear();
+
+    public boolean contains(E e);
+
+    public E get(int index);
+
+    public int indexOf(E e);
+
+    public boolean isEmpty();
+
+    public int lastIndexOf(E e);
+
+    public boolean remove(E e);
+
+    public E remove(int index);
+
+    public Object set(int index, E e);
+
+    public int size();
+
+    public boolean addAll(MyList<E> otherList);
+
+    public boolean removeAll(MyList<E> otherList);
+
+    public boolean retainAll(MyList<E> otherList);
+}
+class GenericQueue<E> {
+    private java.util.LinkedList<E> list
+            = new java.util.LinkedList<E>();
+
+    public void enqueue(E e) {
+        list.addLast(e);
+    }
+
+    public E dequeue() {
+        return list.removeFirst();
+    }
+
+    public int getSize() {
+        return list.size();
+    }
+
+    @Override
+    public String toString() {
+        return "Queue: " + list.toString();
+    }
+}
