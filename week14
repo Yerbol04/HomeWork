@@ -1,0 +1,81 @@
+package HomeWork;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class week14_1_client extends Application {
+    DataInputStream fromClient;
+    DataOutputStream toClient;
+    String message = "";
+
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Text textk = new Text("Annual Interest Rate\n");
+        Text textkk = new Text("Number of Years\n");
+        Text textkkk = new Text("Loan Amount\n");
+        VBox vb = new VBox();
+        vb.getChildren().addAll(textk, textkk, textkkk);
+        TextField text = new TextField();
+        TextField textField = new TextField();
+        TextField textFieldk = new TextField();
+        Button button = new Button("Submit!");
+        TextArea textArea = new TextArea();
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(text, textField, textFieldk);
+        HBox hBox = new HBox();
+        Socket socket = new Socket("localhost", 2022);
+        button.setOnAction(e -> {
+            new Thread(() -> {
+                try {
+                    fromClient = new DataInputStream(socket.getInputStream());
+                    toClient = new DataOutputStream(socket.getOutputStream());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    toClient.writeDouble(Double.parseDouble(text.getText()));
+                    toClient.writeInt(Integer.parseInt(textField.getText()));
+                    toClient.writeDouble(Double.parseDouble(textFieldk.getText()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                try {
+                    message += "Annual Interest Rate: " + text.getText() + "\n";
+                    message += "Number of Years: " + textField.getText() + "\n";
+                    message += "Loan Amount: " + textFieldk.getText() + "\n";
+                    message += "Monthly payment: " + fromClient.readDouble() + "\n";
+                    message += "totalPayment: " + fromClient.readDouble();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    textArea.setText(message);
+                });
+
+
+            }).start();
+        });
+
+        hBox.getChildren().addAll(vb, vBox, button);
+        VBox vBox1 = new VBox();
+        vBox1.getChildren().addAll(hBox, textArea);
+        stage.setScene(new Scene(vBox1, 400, 400));
+        stage.show();
+    }
+}
+
