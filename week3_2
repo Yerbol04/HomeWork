@@ -1,0 +1,29 @@
+package HomeWork;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class week3_7 {
+    public static void main(String[] args){
+        Scanner muh = new Scanner(System.in);
+        try{
+            System.out.println(bin2Dec(muh));
+        } catch (NumberFormatException e){
+            System.out.println("Bolmaidy");
+        }
+    }
+    public static int bin2Dec(Scanner muh) throws NumberFormatException{
+        String bin = muh.nextLine();
+        String[] strings = bin.split("");
+        for (int i = 0; i < strings.length; i++) {
+            if (!(strings[i].equals("1") || strings[i].equals("0"))){
+                throw new NumberFormatException();
+            }
+        }
+        int sum = 0;
+        for (int i = 0; i < strings.length; i++) {
+            sum+=Integer.valueOf(strings[i])*Math.pow(2, i);
+        }
+        return sum;
+    }
+}
