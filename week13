@@ -1,0 +1,69 @@
+package HomeWork;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+
+public class week13_1 extends Application {
+
+    String line = " ";
+    String lines = "";
+    String filePath;
+    String soz = "";
+    String[] strings;
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        ArrayList<String> array = new ArrayList<>();
+
+        new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                lines+=String.valueOf(i + " ");
+//                System.out.print(i + " ");
+//                array.add(String.valueOf(i + " "));
+            }
+        }).start();
+        new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                lines+=String.valueOf("a ");
+//                System.out.print("a ");
+//                array.add("a ");
+            }
+        }).start();
+        new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                lines+=String.valueOf("b ");
+//                System.out.print("b ");
+//                array.add("b ");
+            }
+        }).start();
+//        System.out.println(array);
+//
+//        for (int i = 0; i < array.size(); i++) {
+//            lines+= array.get(i);
+//        }
+
+        TextArea textArea = new TextArea();
+        textArea.setText(lines);
+        Pane pane = new Pane();
+        pane.getChildren().add(textArea);
+
+        Scene scene = new Scene(pane, 400, 400);
+        primaryStage.setTitle("Exercise_14_02");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+}
