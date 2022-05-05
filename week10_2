@@ -1,0 +1,47 @@
+package HomeWork;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class week10_10 {
+    public static void main(String[] args){
+        Scanner muh = new Scanner(System.in);
+        //String soz = muh.nextLine();
+        String[] arr = new String[]{"George", "Jim", "John", "Blake", "Kevin", "Michael"};
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            arrayList.add(arr[i]);
+        }
+        String[] arr22 = new String[]{"George", "Katie", "Kevin", "Michelle", "Ryan"};
+        ArrayList<String> arr2 = new ArrayList<String>(){};
+        for (int i = 0; i < arr22.length; i++) {
+            arr2.add(arr22[i]);
+        }
+        ArrayList<String> union = new ArrayList<>();
+        ArrayList<String> difference = new ArrayList<>();
+        ArrayList<String> intersection = new ArrayList<>();
+        if(arrayList.size() > arr2.size()){
+            for (int i = 0; i < arr2.size(); i++) {
+                if(arrayList.get(i).equals(arr2.get(i))) intersection.add(arrayList.get(i));
+            }
+            for (int i = 0; i < arr2.size(); i++) {
+                for (int j = 0; j < arrayList.size(); j++) {
+                    if(arr2.get(i).equals(arrayList.get(j))) union.add(arr2.get(i));
+                }
+            }
+            for (int i = 0; i < arr2.size(); i++) {
+                for (int j = 0; j < arrayList.size(); j++) {
+                    if(!arr2.get(i).equals(arrayList.get(j))) difference.add(arr2.get(i)); break;
+                }
+            }
+            for (int i = 0; i < arrayList.size(); i++) {
+                for (int j = 0; j < union.size(); j++) {
+                    if(!arrayList.get(i).equals(union.get(j))) difference.add(arrayList.get(i)); break;
+                }
+            }
+        }
+        System.out.println("Intersection: " + intersection);
+        System.out.println("Union: " + union);
+        System.out.println("Difference: " + difference);
+    }
+}
