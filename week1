@@ -1,0 +1,30 @@
+package HomeWork;
+
+import java.util.Scanner;
+
+public class week2_1 {
+    public static double sd1;
+    public static double sd2;
+    public static double sd3;
+
+
+    public static void main(String[] args) {
+        week2_1_2 r = new week2_1_2();
+        Scanner sc = new Scanner(System.in);
+        double side1 = 1.0;
+        double side2 = 1.0;
+        double side3 = 1.0;
+
+        sd1 = sc.nextDouble();
+
+        sd2 = sc.nextDouble();
+        sd3 = sc.nextDouble();
+
+        System.out.println(r.getArea());
+        System.out.println(r.getPerimeter());
+        System.out.println(r.toString());
+
+    }
+}
+
+
