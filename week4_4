@@ -1,0 +1,23 @@
+package HomeWork;
+
+public class week4_6_3 {
+
+    public static void main(String[] args) {
+        week4_6_2  c1 = new week4_6_2(12.51);
+        week4_6_2  c2 = new week4_6_2 (14.51);
+        week4_6_2  c3 = new week4_6_2 (12.51);
+
+        System.out.println("C1 area = " + c1.getArea() + ", C2 area = " + c2.getArea());
+        System.out.print("C1 compareTo C2 = ");
+        System.out.println(c1.compareTo(c2));
+
+        System.out.println("C2 area = " + c2.getArea() + ", C1 area = " + c1.getArea());
+        System.out.print("C2 compareTo C1 = ");
+        System.out.println(c2.compareTo(c1));
+
+        System.out.println("C3 area = " + c3.getArea() + ", C1 area = " + c1.getArea());
+        System.out.print("C3 compareTo C1 = ");
+        System.out.println(c3.compareTo(c1));
+
+    }
+}
