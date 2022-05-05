@@ -1,0 +1,16 @@
+package HomeWork;
+
+public class week4_6_2 extends week4_6 implements Comparable<week4_6> {
+    public week4_6_2() {
+        super();
+    }
+
+    public week4_6_2(double radius) {
+        super(radius);
+    }
+
+    @Override
+    public int compareTo(week4_6 circle) {
+        return Double.compare(this.getArea(), circle.getArea());
+    }
+}
