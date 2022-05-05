@@ -1,0 +1,18 @@
+package HomeWork;
+
+public class week2_1_2 extends week2_1{
+
+    public double getArea(){
+        double per1 = sd1 + sd2 + sd3;
+        double area = Math.pow(per1 * (per1 - sd1) * (per1 - sd2) * (per1 - sd3) , 0.5);
+        return area;
+    }
+    public double getPerimeter(){
+        double per = sd1 + sd2 + sd3;
+        return per;
+    }
+    public String toString(){
+        String str = "Triangle: side1 =" + sd1 + " side2 =" + sd2 + " side3 =" + sd3;
+        return str;
+    }
+}
